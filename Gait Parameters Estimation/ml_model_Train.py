@@ -144,6 +144,12 @@ seed = 7
 X_train, X_validation, Y_train, Y_validation = train_test_split(X, y,
                     test_size=validation_size, random_state=seed)
 
+from imblearn.over_sampling import SMOTE
+
+smote = SMOTE('minority')
+X_sm, Y_sm = smote.fit_sample(X_train, Y_train)
+print(X_sm.shape, Y_sm.shape)
+
 # c) Spot Check Algorithms
 models = []
 models.append(('LR', LogisticRegression(solver='liblinear', multi_class='ovr')))
@@ -157,7 +163,7 @@ results = []
 names = []
 for name, model in models:
 	kfold = StratifiedKFold(n_splits=10, random_state=1, shuffle=True)
-	cv_results = cross_val_score(model, X_train, Y_train, cv=kfold, scoring='accuracy')
+	cv_results = cross_val_score(model, X_sm, Y_sm, cv=kfold, scoring='accuracy')
 	results.append(cv_results)
 	names.append(name)
 	print('%s: %f (%f)' % (name, cv_results.mean(), cv_results.std()))
