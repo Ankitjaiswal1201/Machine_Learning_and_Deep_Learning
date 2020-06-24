@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 # matplotlib inline
 from sklearn.preprocessing import LabelEncoder
 
-train = pd.read_csv('/Users/shubhamjain/Downloads/AV/Big Mart/train.csv')
-test = pd.read_csv('/Users/shubhamjain/Downloads/AV/Big Mart/test.csv')
+train = pd.read_csv('train.csv')
+test = pd.read_csv('test.csv')
 
 
 # preprocessing
