@@ -26,11 +26,5 @@ The pictures are medium-resolution color JPEGs. They look like this:
  
  ![cats_vs_dogs_samples](https://s3.amazonaws.com/book.keras.io/img/ch5/cats_vs_dogs_samples.jpg)
 
- Unsurprisingly, the cats vs. dogs Kaggle competition in 2013 was won by entrants who used convnets. The best entries could achieve up to 
- 95% accuracy. In our own example, we will get fairly close to this accuracy (in the next section), even though we will be training our 
- models on less than 10% of the data that was available to the competitors.
- This original dataset contains 25,000 images of dogs and cats (12,500 from each class) and is 543MB large (compressed). After downloading 
- and uncompressing it, we will create a new dataset containing three subsets: a training set with 1000 samples of each class, a validation 
- set with 500 samples of each class, and finally a test set with 500 samples of each class.
 
 Reference: Deep learning with Python book
