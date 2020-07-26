@@ -33,4 +33,4 @@ The pictures are medium-resolution color JPEGs. They look like this:
  and uncompressing it, we will create a new dataset containing three subsets: a training set with 1000 samples of each class, a validation 
  set with 500 samples of each class, and finally a test set with 500 samples of each class.
 
-Reference: Deep learning with Python
+Reference: Deep learning with Python book
