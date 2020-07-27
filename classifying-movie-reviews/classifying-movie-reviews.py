@@ -1,10 +1,32 @@
 import keras
+
+# # Classifying movie reviews: a binary classification example
+# we will learn to classify movie reviews into "positive" reviews and "negative" reviews, just based on the text content of the reviews.
+
+# ## The IMDB dataset
+# 
+# 
+# We'll be working with "IMDB dataset", a set of 50,000 highly-polarized reviews from the Internet Movie Database. They are split into 25,000 
+# reviews for training and 25,000 reviews for testing, each set consisting in 50% negative and 50% positive reviews.
+
+
 from keras.datasets import imdb
 
 (train_data, train_labels), (test_data, test_labels) = imdb.load_data(num_words=10000)
-train_data[0]
-train_labels[0]
+
+print(train_data[0])
+
+print(train_labels[0])
+
+
+#  we restrict ourselves to the top 10,000 most frequent words, no word index will exceed 10,000:
+
+
 max([max(sequence) for sequence in train_data])
+
+
+# For kicks, here's how you can quickly decode one of these reviews back to English words:
+
 
 # word_index is a dictionary mapping words to an integer index
 word_index = imdb.get_word_index()
@@ -13,7 +35,24 @@ reverse_word_index = dict([(value, key) for (key, value) in word_index.items()])
 # We decode the review; note that our indices were offset by 3
 # because 0, 1 and 2 are reserved indices for "padding", "start of sequence", and "unknown".
 decoded_review = ' '.join([reverse_word_index.get(i - 3, '?') for i in train_data[0]])
+
 decoded_review
+
+
+# ## Preparing the data
+# 
+# 
+# We cannot feed lists of integers into a neural network. We have to turn our lists into tensors. There are two ways we could do that:
+# 
+# * We could pad our lists so that they all have the same length, and turn them into an integer tensor of shape `(samples, word_indices)`, 
+# then use as first layer in our network a layer capable of handling such integer tensors (the `Embedding` layer, which we will cover in 
+# detail later in the book).
+# * We could one-hot-encode our lists to turn them into vectors of 0s and 1s. Concretely, this would mean for instance turning the sequence 
+# `[3, 5]` into a 10,000-dimensional vector that would be all-zeros except for indices 3 and 5, which would be ones. Then we could use as 
+# first layer in our network a `Dense` layer, capable of handling floating point vector data.
+# 
+# We will go with the latter solution. Let's vectorize our data, which we will do manually for maximum clarity:
+
 
 import numpy as np
 
@@ -29,12 +68,21 @@ x_train = vectorize_sequences(train_data)
 # Our vectorized test data
 x_test = vectorize_sequences(test_data)
 
-x_train[0]
+
+# Here's what our samples look like now:
+print(x_train[0])
+
+
+# We should also vectorize our labels, which is straightforward:
 
 # Our vectorized labels
 y_train = np.asarray(train_labels).astype('float32')
 y_test = np.asarray(test_labels).astype('float32')
 
+
+# Now our data is ready to be fed into a neural network.
+
+# ## Building our network
 
 from keras import models
 from keras import layers
@@ -81,6 +129,7 @@ history = model.fit(partial_x_train,
 history_dict = history.history
 history_dict.keys()
 
+
 import matplotlib.pyplot as plt
 
 acc = history.history['acc']
@@ -114,6 +163,7 @@ plt.legend()
 
 plt.show()
 
+
 model = models.Sequential()
 model.add(layers.Dense(16, activation='relu', input_shape=(10000,)))
 model.add(layers.Dense(16, activation='relu'))
@@ -126,6 +176,6 @@ model.compile(optimizer='rmsprop',
 model.fit(x_train, y_train, epochs=4, batch_size=512)
 results = model.evaluate(x_test, y_test)
 
-results
+print(results)
 
 model.predict(x_test)
